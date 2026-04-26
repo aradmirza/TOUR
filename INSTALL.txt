@@ -1,0 +1,234 @@
+============================================================
+  TourMate Social — Installation Guide
+  Complete PHP + MySQL Tourist Group Management System
+  Version 3.0 | Admin + User Panel Edition
+============================================================
+
+============================================================
+  QUICK START (Hostinger / CloudPanel / cPanel)
+============================================================
+
+STEP 1 — Upload Files
+--------------------------------------------------------------
+1. Upload ALL files to your hosting:
+   - Hostinger: public_html/
+   - CloudPanel: htdocs/ or /var/www/domain.com/htdocs/
+   - cPanel:    public_html/
+2. Keep the exact folder structure intact.
+
+   /public_html/
+   ├── admin/          ← Admin panel
+   ├── user/           ← User panel
+   ├── api/            ← AJAX endpoints
+   ├── assets/         ← CSS, JS
+   ├── database/       ← SQL files
+   ├── includes/       ← Shared PHP includes
+   ├── uploads/        ← User uploaded files
+   │   ├── group/
+   │   ├── posts/
+   │   ├── profile/
+   │   └── receipts/
+   ├── index.php
+   ├── login.php
+   ├── register.php
+   └── logout.php
+
+
+STEP 2 — Create Database
+--------------------------------------------------------------
+1. Log in to hosting control panel
+2. Go to Databases → MySQL Databases
+3. Create database: e.g. tourmate_social
+4. Create a DB user with strong password
+5. Assign user to database with ALL PRIVILEGES
+6. Open phpMyAdmin → select your database
+7. Click Import → choose: database/tourmate_complete.sql
+8. Click Go
+
+
+STEP 3 — Configure the App
+--------------------------------------------------------------
+Edit: includes/config.php
+
+  define('DB_HOST',   'localhost');
+  define('DB_USER',   'your_db_username');
+  define('DB_PASS',   'your_db_password');
+  define('DB_NAME',   'tourmate_social');
+  define('SITE_URL',  'https://yourdomain.com');
+  date_default_timezone_set('Asia/Dhaka');
+
+
+STEP 4 — Create Admin Account
+--------------------------------------------------------------
+1. Visit: https://yourdomain.com/admin/setup.php
+2. Fill in admin name, email, password (8+ chars)
+3. Click "Create Admin Account"
+4. DELETE setup.php from server immediately!
+
+
+STEP 5 — Test Logins
+--------------------------------------------------------------
+User Login:   https://yourdomain.com/login.php
+              demo@tourmate.com / password123
+
+User Panel:   https://yourdomain.com/user/dashboard.php
+
+Admin Panel:  https://yourdomain.com/admin/login.php
+              (your credentials from Step 4)
+
+
+STEP 6 — Fix Upload Permissions (if uploads fail)
+--------------------------------------------------------------
+Via FTP or File Manager, set permissions to 755:
+  uploads/
+  uploads/profile/
+  uploads/group/
+  uploads/posts/
+  uploads/receipts/
+
+
+============================================================
+  UPGRADING FROM v1 / v2 (Existing Database)
+============================================================
+
+DO NOT import tourmate_complete.sql (it may conflict).
+Instead run: database/tourmate_v2_migration.sql
+This adds new columns without destroying existing data.
+Then visit /admin/setup.php for the admin account.
+
+
+============================================================
+  FOLDER STRUCTURE
+============================================================
+
+/admin/                 Admin-only panel
+  login.php             Admin login
+  dashboard.php         Stats dashboard
+  users.php             User management
+  user-view.php         User detail view
+  groups.php            Tour groups list
+  group-view.php        Group detail
+  expenses.php          All group expenses
+  posts.php             Post moderation
+  comments.php          Comment moderation
+  reports.php           Reports
+  settings.php          Site settings
+  notifications.php     Send notifications
+  setup.php             ONE-TIME setup (delete after use!)
+  change-password.php   Admin password
+
+/user/                  User panel (requires login)
+  dashboard.php         Dashboard + countdown
+  profile.php           Profile editor
+  groups.php            My tours
+  create-group.php      New tour group
+  group.php             Group overview
+  group-members.php     Manage members
+  tour-plan.php         Plan checklist
+  expenses.php          Expense tracker + split
+  settlement.php        Settlement calculator
+  feed.php              Social feed
+  gallery.php           Photo gallery
+  notifications.php     Notifications
+  settings.php          Account settings
+
+/includes/              Shared backend
+  config.php            ← EDIT THIS FIRST
+  db.php                DB connection
+  auth.php              Auth + helpers
+
+/assets/css/
+  style.css             Main stylesheet
+  user-panel.css        User panel extras (bottom nav)
+/admin/assets/css/
+  admin.css             Admin stylesheet
+
+
+============================================================
+  DEFAULT CREDENTIALS
+============================================================
+
+Demo User:
+  Email:    demo@tourmate.com
+  Password: password123
+
+Admin:      Set during /admin/setup.php
+
+⚠ CHANGE PASSWORDS IMMEDIATELY AFTER TESTING!
+
+
+============================================================
+  SECURITY CHECKLIST
+============================================================
+
+✅ Delete admin/setup.php after first admin created
+✅ Change demo user password in admin panel
+✅ Set strong admin password
+✅ Enable HTTPS (free on Hostinger)
+✅ Keep PHP 7.4+
+
+
+============================================================
+  REQUIREMENTS
+============================================================
+
+- PHP 7.4+ (8.1 recommended)
+- MySQL 5.7+ or MariaDB 10.3+
+- Extensions: mysqli, fileinfo, session
+- Any shared hosting (Hostinger, Bluehost, cPanel, etc.)
+- No Node.js, No React, No Laravel needed
+
+
+============================================================
+  TROUBLESHOOTING
+============================================================
+
+White screen / errors
+  → Check config.php database settings
+  → Enable errors: add ini_set('display_errors', 1); to index.php
+
+Upload not working
+  → chmod 755 uploads/ and subfolders
+
+Database connection error
+  → Try DB_HOST = '127.0.0.1' instead of 'localhost'
+
+Admin panel → redirected to login
+  → Run SQL migration, then visit /admin/setup.php
+
+Images not showing in /user/ pages
+  → Images use ../uploads/ paths — this is correct
+
+Session / CSRF errors
+  → Clear browser cookies and try again
+
+
+============================================================
+  TIMEZONE LIST
+============================================================
+
+Asia/Dhaka       Bangladesh    |  Asia/Kolkata     India
+Asia/Karachi     Pakistan      |  Asia/Dubai       UAE
+Asia/Singapore   Singapore     |  Europe/London    UK
+America/New_York USA Eastern   |  America/Chicago  USA Central
+
+
+============================================================
+  HOSTINGER TIPS
+============================================================
+
+1. Database host: 'localhost' (not an IP)
+2. phpMyAdmin: Databases → Manage
+3. PHP version: Advanced → PHP Settings → 8.1
+4. Free SSL: Security → SSL Certificate
+5. Upload: Files → File Manager → public_html
+
+
+============================================================
+  SUPPORT
+============================================================
+
+Built with: Core PHP + MySQL + HTML + CSS + JavaScript
+Hosting:    Any shared hosting (PHP 7.4+)
+No build tools, no npm, no composer required.
+============================================================
